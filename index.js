@@ -20,25 +20,25 @@ app.post('/diff', async (req, res) => {
     let file1Name = 'file1.json',
         file2Name = 'file2.json';
     try {
-        JSON.parse(JSON.stringify(file1));
+        JSON.parse(file1);
     } catch (e) {
         file1Name = 'file1.yaml';
     }
 
     try {
-        JSON.parse(JSON.stringify(file2));
+        JSON.parse(file2);
     } catch (e) {
         file2Name = 'file2.yaml';
     }
 
-    fs.writeFile(file1Name, JSON.stringify(file1), function (err) {
+    fs.writeFile(file1Name, file1, function (err) {
         if (err) throw err;
         console.log('Saved file 1!');
-        fs.writeFile(file2Name, JSON.stringify(file2), function (err) {
+        fs.writeFile(file2Name, file2, function (err) {
             if (err) throw err;
             console.log('Saved file 2!');
 
-            DiffService.getAPIDiff((err, data) => {
+            DiffService.getAPIDiff(file1Name, file2Name, (err, data) => {
                 if (err) {
                     console.log('Error ', err);
                     res.send(err);
